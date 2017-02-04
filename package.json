@@ -1,0 +1,29 @@
+{
+  "name": "petpal-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=dev nodemon ./server.js --watch",
+    "test": "NODE_ENV=test nodemon --exec 'mocha -R min'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.0",
+    "body-parser": "^1.16.0",
+    "config": "^1.25.1",
+    "cors": "^2.8.1",
+    "express": "^4.14.1",
+    "jsonwebtoken": "^7.2.1",
+    "port": "^0.8.1",
+    "validator": "^6.2.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.2.0"
+  }
+}
