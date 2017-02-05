@@ -21,9 +21,8 @@ let userApi = (app, mongoose) => {
         userId: user._id
       });
     }).catch((e) => {
-      console.log("Error signing up. ", e);
       errLogger(e)
-       .then(() => {res.status(400).send();})
+       .then(() => {res.status(401).send(e);})
        .catch(()=>{console.log('Cannot write to log file');
       });
      });

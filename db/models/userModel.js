@@ -9,10 +9,10 @@ const mongoose = require('mongoose'),
       const UserSchema = new mongoose.Schema({
         username: {
           type: String,
-          required: true,
+          required: [true, 'Username is missing'],
           trim: true,
           minlength: 1,
-          minlength: 4
+          minlength: 3
         },
         email: {
           type: String,
@@ -27,7 +27,7 @@ const mongoose = require('mongoose'),
         },
         password: {
           type: String,
-          required: true,
+          required: [true, 'password is missing'],
           trim: true,
           minlength: 1,
           minlength: 4
