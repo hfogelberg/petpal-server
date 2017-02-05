@@ -70,10 +70,10 @@ let userApi = (app, mongoose) => {
   app.post('/api/users/login', (req, res) => {
     console.log('POST login', req.body);
 
-    let email = req.body.email.trim();
+    let username = req.body.username.trim();
     let password = req.body.password.trim();
 
-    User.findByCredentials(email, password)
+    User.findByCredentials(username, password)
            .then((user) => {
              return user.generateAuthToken().then((token) => {
                res.send({
@@ -83,7 +83,7 @@ let userApi = (app, mongoose) => {
              });
            })
            .catch((e) => {
-             console.log('Error returning token ', e);
+             console.log('Error logging in user ', e);
              res.status(400).send();
            });
 

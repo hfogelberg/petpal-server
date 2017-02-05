@@ -4,14 +4,12 @@ const chai = require('chai'),
           should = chai.should(),
           mongoose = require('mongoose'),
           assert = require( 'assert');
+
 var {User} = require('../db/models/userModel')
 
+chai.use(chaiHttp);
 
-describe('user', ()=>{
-  beforeEach((done)=>{
-    mongoose.connection.collections.users.drop(() => {done();});
-  });
-
+describe('signup up new user', ()=>{
   it('it should create a new user', (done)=>{
     let user = {
       username: 'test',
@@ -46,7 +44,7 @@ describe('user', ()=>{
 
   it('it must have a password', (done)=>{
     let user = {
-      usernam: 'test',
+      username: 'test',
       email: 'test@test.com'
     }
     chai.request(server)
@@ -61,7 +59,7 @@ describe('user', ()=>{
 
   it('it must have a valid email', (done)=>{
     let user = {
-      usernam: 'test',
+      username: 'test',
       email: 'test@testcom',
       password: 'password'
     }
@@ -74,25 +72,29 @@ describe('user', ()=>{
           done();
         });
   });
+});
 
-  it('username must be unique', (done)=>{
-    let user1 = new User({
-      usernam: 'test1',
-      email: 'test1@testcom',
+describe('new user must be unique', ()=>{
+  beforeEach((done) => {
+    joe = new User({
+      username: 'test',
+      email: 'test@test.com',
       password: 'password'
     });
+    joe.save()
+      .then(() =>{done();});
+  });
 
-    user1.save().then(()=>{done();});
-
-    let user2 = new User({
-      usernam: 'test1',
-      email: 'test2@testcom',
+  it('email must be unique', (done)=>{
+    let user = new User({
+      username: 'test1',
+      email: 'test@test.com',
       password: 'password'
     });
 
     chai.request(server)
         .post('/api/users')
-        .send(user2)
+        .send(user)
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.a('object');
@@ -100,28 +102,20 @@ describe('user', ()=>{
         });
   });
 
-    it('email must be unique', (done)=>{
-      let user1 = new User({
-        usernam: 'test1',
-        email: 'test1@testcom',
-        password: 'password'
-      });
-
-      user1.save().then(()=>{done();});
-
-      let user2 = new User({
-        usernam: 'test2',
-        email: 'test1@testcom',
-        password: 'password'
-      });
-
-      chai.request(server)
-          .post('/api/users')
-          .send(user2)
-          .end((err, res) => {
-            res.should.have.status(401);
-            res.body.should.be.a('object');
-            done();
-          });
+  it('username must be unique', (done)=>{
+    let user = new User({
+      username: 'test',
+      email: 'test1@test.com',
+      password: 'password'
     });
+
+    chai.request(server)
+        .post('/api/users')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.a('object');
+          done();
+        });
+  });
 });
